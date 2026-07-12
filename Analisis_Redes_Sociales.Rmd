@@ -1,0 +1,364 @@
+---
+title: "Uso del tiempo en redes sociales por jóvenes (Argentina, 2024)"
+author: "Benicio Armendano"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r librerias, echo=FALSE, warning = FALSE}
+library(tidyverse)
+library(DT)
+library (dplyr)
+```
+
+```{r dataset, echo= FALSE, warning=FALSE}
+library(readxl)
+DF <- read_excel("C:/Users/usuario/Desktop/R - CODERHOUSE 2024/Trabajo final/USO DE REDES SOCIALES EN JOVENES2- ARMENDANO.xlsx")
+```
+
+```{r Conversión de los tipos de datos - character a factor, echo= FALSE, warning=FALSE, eval=FALSE}
+DF<- as.data.frame(unclass(DF),stringsAsFactors = TRUE)
+DF
+str (DF)
+```
+
+## 1. Introducción
+
+Para el presente trabajo, se extrajo información de la Base de Datos proporcionada a través de la Encuesta Nacional de Consumos Culturales (ENCC) realizada en el territorio de Argentina durante los años 2019 y 2024 (disponible en: <https://www.datos.gob.ar/dataset/cultura-encuesta-nacional-consumos-culturales>). La ENCC busca conocer en profundidad el comportamiento de la población argentina respecto de los hábitos y consumos culturales.
+
+En ella, se pretende realizar un análisis descriptivo de los datos acerca del uso del tiempo que es destinado en redes sociales entre los años 2019 y 2024 en personas jóvenes provenientes de Argentina, entendiéndose por un rango etario de 18 a 29 años. En principio, se busca identificar si el uso en redes sociales es habitual, es decir que el consumo suele ser de al menos de 4 horas diarias y si durante el año se mantiene este hábito, así como también observar la fecuencia en que se navega sin un propósito alguno. En segundo lugar, se observa cuáles son las redes sociales (se han seleccionado las más populares: Youtube, Instagram, X, Facebook, WhatsApp, Twitch, Telegram y TikTok) que se utilizan en mayor medida y por ende, en menor medida. Finalmente, se detectan cuáles son las prácticas digitales que emplean en las redes sociales en general, a través de las frecuencias que permiten un ida y vuelta para el análisis del uso del tiempo en las redes sociales.
+
+## 2. Objetivos
+
+-   Analizar los datos acerca del uso del tiempo habitual tanto diario como anual en redes sociales que prevalece en jóvenes de 18 a 29 años, considerando la provincia argentina que habitan, y habiendo sido encuestadxs entre los años 2019 y 2024 por la ENCC.
+
+-   Identificar cuáles son las redes sociales que se utilizan mayormente (y por ende, en menor medida), siendo estas: Youtube, Instagram, WhatsApp, Facebook, Twitch, Tik Tok, X (Twitter) o Telegram.
+
+-   Detectar cuáles son las prácticas digitales habituales de uso en las redes sociales, y con qué frecuencia realizan cada una de ellas de forma comparativa.
+
+## 3. Datos de las personas encuestadas
+
+Previo a la descripción y al análisis de las variables, se informan datos propios de la población en cuestión. Se cuenta con un total de 1404 personas encuestadas. Se dan a conocer datos que han sido relevados durante la encuesta a cada persona, reflejandolas de forma confidencial, mediante un ID, que sería la primera columna. Y los datos que se extrajeron resultan pertinentes para el filtreo del análisis posterior.
+
+Los datos son:
+
+-   edad = edad de las personas encuestadas,
+
+-   provincia = ubicación geográfica (provincias de Argentina),
+
+-   fecha_registro_encuesta = fecha de registro en que se realizó la encuesta,
+
+-   nivel_educativo = máxima formación educativa alcanzada,
+
+-   situación_laboral_actual = situación laboral en la que se encuentra la persona al momento de realizar la encuesta
+
+Aquí se muestra la tabla de individuos con los datos mencionados anteriormente:
+
+```{r tabla de individuos con edad, provincia, nivel educativo y situacion laboral}
+library(dplyr)
+library(tidyverse)
+library(magrittr)
+library(DT)
+tablaIndividuos<- DF %>%
+                  select(id_individuo, provincia, edad, fecha_registro_encuesta,
+                         nivel_educativo, situacion_laboral_actual)
+# Mostrar la tabla interactiva con filtros
+datatable(tablaIndividuos, filter = 'top')
+
+```
+
+Se muestra un resumen de las variables provincia, edad, nivel educativo y situación laboral de las personas encuestadas con el fin de identificar estadísticamente sus categorias.
+
+```{r, resumen estadistico, los resultados que aparecen acá son los que quiero que aparezcan en el html}
+TI<- tablaIndividuos%>%
+     select (provincia, edad, nivel_educativo, situacion_laboral_actual)
+summary(TI)
+```
+
+## 4. Descripción de las variables
+
+Para el análisis de datos, se seleccionaron las siguientes variables que serán descriptas:
+
+en principio, aquellas variables en relación al uso del tiempo habitual que cada individuo destina de las redes sociales como consumo cultural, tanto anual como diariamente, y también se detecta la frecuencia en que navegan sin propósitos a través de las redes:
+
+-   uso_redes_habitualaño = si ha usado o no redes sociales de forma habitual en el último año
+-   uso_redes_ayer = si ha usado redes sociales el día anterior a ser encuestadx
+-   frec_navegacion_internet_sp = la frecuencia en que navega por internet sin propósito alguno
+
+En segundo lugar, se utilizan variables en relación al tipo de red social para luego ser comparadas en cuánto al mayor o menor uso que se les da:
+
+-   uso_youtube = si usa o no Youtube
+-   uso_instagram = si usa o no Instagram
+-   uso_whatsapp = si usa o no WhatsApp
+-   uso_facebook = si usa o no Facebook
+-   uso_twitch = si usa o no Twitch
+-   uso_X = si usa o no X (Twitter)
+-   uso_tiktok = si usa o no TikTok
+-   uso_telegram = si usa o no Telegram
+
+Finalmente, se hace énfasis en dilucidar cuáles son las prácticas digitales que realizan habitualmente en las redes sociales con el fin de identificar sus frecuencias:
+
+-   frecuencia_subir_publivideocontenido_red = frecuencia en la que sube publicaciones, videos o cualquier contenido propio a las redes sociales
+-   frecuencia_compartir_contenidootros_red = frecuencia en la que comparte contenidos de otros en las redes sociales
+-   frecuencia_mirar_publivideocontenidosotros_red = frecuencia en la que mira publicaciones, videos o cualquier contenido de otros en las redes sociales
+-   frecuencia_mirar_transmisionesenvivo_red = frecuencia en la que mira transmisiones en vivo en las redes sociales
+
+
+## 5. Análisis de las variables
+
+A continuación, se observa el análisis de datos realizado mediante la base de datos proporcionada por la ENCC (realizada entre los años 2019 y 2024) para dilucidar comportamientos en el uso habitual de redes sociales de jóvenes entre 18 y 29 años en Argentina, que han sido encuestadxs entre los años 2019 y 2024 por la ENCC.
+
+### A. El hábito de usar redes sociales
+
+Se entiende por "habitual" a un uso cotidiano de al menos 3-4 horas diarias. Para observar este comportamiento, se visualizan 3 gráficos: 1.  Uso habitual en redes sociales que se da de forma anual entre aquellxs jóvenes que lo hacen y lxs que no lo hacen; 2.  Uso habitual en redes sociales que se da a diario entre aquellxs jóvenes que lo hacen y lxs que no lo hacen; 3.  Frecuencia en la que se utilizan las redes sociales sin propósitos.  
+
+```{r Uso Habitual de Redes Sociales durante el Año- frecuencias de cada categoria + proporciones+ grafico de torta}
+library(ggplot2)
+library(dplyr)
+
+# Contar las frecuencias de cada categoría 
+DF_count <- DF %>%
+  count(uso_redes_habitualaño, name = "count")
+
+# Calcular proporciones para las etiquetas
+DF_count <- DF_count %>%
+  mutate(proporcion = count / sum(count) * 100)
+
+# Crear el gráfico de torta con etiquetas
+ggplot(DF_count, aes(x = "", y = count, fill = uso_redes_habitualaño)) +
+  geom_bar(stat = "identity", color = "white") +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = paste0(uso_redes_habitualaño, ": ", round(proporcion, 1), "%")),
+            position = position_stack(vjust = 0.5),
+            color = "black") +
+  labs(
+    title = "Uso Habitual de Redes Sociales durante el Año",
+    x = NULL,
+    y = NULL,
+    fill = "Uso"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_blank(),  # Ocultar etiquetas del eje x
+    panel.grid = element_blank(),    # Ocultar la cuadrícula del panel
+    legend.position = "right"        # Posicionar la leyenda a la derecha
+  )
+```
+
+```{r, Uso Habitual de Redes Sociales a diario- select + NA+ conversion+ conteo+ proporciones+ grafico de torta, echo=FALSE, results= "hide"}
+library(ggplot2)
+library(dplyr)
+
+#Selección de variable
+TablaURDiario<- DF %>%    
+  select(uso_redes_ayer)
+TablaURDiario
+
+#Omitir los valores NA o Ns/Nc
+TablaURDiarioNA <- TablaURDiario %>%
+  filter(across(starts_with("uso_"), ~ !is.na(.) & . != "Ns/Nc"))
+print(TablaURDiarioNA)
+
+#convertir las columnas en factores (asumiendo que el valor 1 es SI)
+TablaURDiarioNA <- TablaURDiarioNA %>%
+  mutate(across(everything(), as.factor))
+str(TablaURDiarioNA)
+
+# Cambiar los nombres de las categorías
+TablaURDiarioNA$uso_redes_ayer <- factor(TablaURDiarioNA$uso_redes_ayer, labels = c("No", "Si"))
+
+# Contar las frecuencias de cada categoría 
+countDiario <- TablaURDiarioNA %>%
+  count(uso_redes_ayer, name = "count")
+
+# Calcular proporciones para las etiquetas
+countDiario <- countDiario %>%
+  mutate(proporcion = count / sum(count) * 100)
+
+# Crear el gráfico de torta con etiquetas
+ggplot(countDiario, aes(x = "", y = count, fill = uso_redes_ayer)) +
+  geom_bar(stat = "identity", color = "white") +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = paste0(uso_redes_ayer, ": ", round(proporcion, 1), "%")),
+            position = position_stack(vjust = 0.5),
+            color = "black") +
+  labs(
+    title = "Uso Habitual de Redes Sociales a diario",
+    x = NULL,
+    y = NULL,
+    fill = "Uso"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_blank(),  # Ocultar etiquetas del eje x
+    panel.grid = element_blank(),    # Ocultar la cuadrícula del panel
+    legend.position = "right"        # Posicionar la leyenda a la derecha
+  )
+
+
+```
+
+
+```{r, Frecuencia del uso de redes sociales sin propósito- select- valores NA- grafico de barra, echo=FALSE, results= "hide"}
+library(dplyr)
+URSP<- DF %>%
+  select(frec_navegacion_internet_sp)
+URSP
+
+URSP1 <- URSP %>%
+  filter(across(starts_with("frec_"), ~ !is.na(.) & . != "Ns/Nc"))
+print(URSP1)
+
+library(ggplot2)
+ggplot(URSP1, aes(x = frec_navegacion_internet_sp)) +
+  geom_bar(fill = "turquoise", stat = "count") +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3.5, color = "black") +  # Agregar etiquetas de valores
+  labs(title = "Frecuencia del uso de redes sociales sin propósito",
+       x = "Frecuencia",
+       y = "Encuestadxs") +
+  theme_minimal() +
+  theme(  axis.text.x = element_text(angle = 45, hjust = 1),# Rotar etiquetas del eje x para mejor legibilidad
+          panel.grid = element_blank())
+```
+
+#### Observaciones
+
+-   Se puede observar que hay una notoria relación entre los resultados que expresan los 3 gráficos de dichas variables.
+-   La gran mayoría de lxs jóvenes hacen uso habitual de redes sociales en general, tanto a diario (79,6%) como anualmente (99%). Mientras que, la mayoría (754) admite que hace uso de ellas sin propósito alguno con una frecuencia de todos o casi todos los días, incluso le sigue algunas veces a la semana (344).
+-   Esto da cuenta de lo significativo que resultan ser las redes sociales en la cotidianeidad de lxs jóvenes probablemente como parte del ocio o entretenimiento.
+
+### B. Tipos de redes sociales
+
+De acuerdo a estudios recientes se informa que las redes sociales más populares entre 2019 y 2024 son: Youtube, Facebook, Twitch, Instagram, X (Twitter), Telegram, TikTok y WhatsApp. Aquí se observa de forma comparativa cuáles son las redes sociales más usadas por lxs jóvenes y por ende, las que menos se usan.
+
+```{r, select, tabla de tipos de redes, echo=FALSE, results= "hide"}
+TRS<- DF%>%
+  select(uso_yotube, uso_instagram, uso_facebook, uso_tiktok, uso_twitch, uso_X,
+         uso_whatsapp, uso_telegram)
+TRS
+```
+
+```{r, sacar valores NA y Ns/Nc, echo=FALSE, results= "hide"    }
+TRS1 <- TRS %>%
+  filter(across(starts_with("uso_"), ~ !is.na(.) & . != "Ns/Nc"))
+print(TRS1)
+```
+
+```{r, conversion factor- conteo- grafico columnas agrupadas, echo=FALSE, results= "hide"}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# Primero, convertir las columnas en factores (asumiendo que el valor 1 es SI)
+TRS1 <- TRS1 %>%
+  mutate(across(everything(), as.factor))
+str(TRS1)
+
+# Contar el número de veces que aparece el valor 1 en cada columna
+conteo_1 <- TRS1 %>%
+  summarise(across(everything(), ~ sum(. == "1", na.rm = TRUE))) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Conteo")
+conteo_1
+
+# Crear el gráfico de columnas agrupadas
+ggplot(conteo_1, aes(x = reorder(Variable,conteo_1), y = Conteo, fill = Variable)) +
+  geom_col() +
+  geom_text(aes(label = Conteo), vjust = -0.5, color = "black") +
+  labs(
+    title = "Uso de redes sociales según el tipo",
+    x = "Tipo de red social",
+    y = "Encuestadxs"
+  ) +
+ scale_x_discrete(labels = c(
+    "uso_facebook"  = "Facebook",
+    "uso_instagram" = "Instagram",
+    "uso_telegram" = "Telegram",
+    "uso_tiktok" = "TikTok",
+    "uso_twitch" = "Twitch",
+    "uso_whatsapp" = "WhatsApp",
+    "uso_X" = "X (Twitter)",
+    "uso_yotube" = "Youtube"
+  ))+
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),# Rotar etiquetas del eje x para mejor legibilidad
+    panel.grid = element_blank(),    # Ocultar la cuadrícula del panel
+    legend.position = "none"  # Opcional: quitar la leyenda si no es necesaria
+  )
+```
+
+#### Observaciones
+
+-   Se pueden observar los tipos de redes sociales de mayor a menor uso: 1- WhatsApp (1286), 2- Youtube (1268), 3- Instagram (1130), 4- Facebook (1112), 5- TikTok (710), 6- X (402), 7- Telegram (296) y 8- Twitch (236).
+-   WhatsApp y Youtube son las redes sociales que más se usan, mientras que Twitch y Telegram son las que menos se usan.
+
+### C. Prácticas digitales
+
+Se entiende por práctica digital a todas aquellas actividades o acciones que suelen realizarse en un medio digital. En este caso, se identifican cuatro tipo de prácticas recurrentes según expertos que se realizan en las redes sociales: 1. subir publicaciones, videos o contenido propio, 2. compartir contenido de otros, 3. mirar publicaciones, videos o contenidos de otros y 4. mirar transmisiones en vivo.
+
+```{r , seleccion para creacion de df, echo=FALSE, results= "hide"   }
+library(dplyr)
+PD<- DF %>%
+  select(frecuencia_subir_publivideocontenido_red, frecuencia_compartir_contenidootros_red, frecuencia_mirar_publivideocontenidosotros_red,
+         frecuencia_mirar_transmisionesenvivo_red)
+PD
+```
+
+```{r, sacar los valores NA, echo=FALSE, results= "hide"   }
+
+PD_clean <- PD %>%
+  filter(across(starts_with("frecuencia_"), ~ !is.na(.) & . != "Ns/Nc"))
+print(PD_clean)
+```
+
+```{r, frecuencias,  grafico de barras, echo=FALSE, results= "hide"}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# Contar frecuencias para cada variable y convertir a formato largo
+frecPD <- PD_clean %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "frecuencia") %>%
+  count(variable, frecuencia) %>%
+  mutate(proporcion = n / sum(n) * 100)
+
+# Crear el gráfico de barras apiladas
+ggplot(frecPD, aes(x = variable, y = n, fill = frecuencia)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = n),  position = position_stack(vjust = 0.5),  # Colocar etiquetas en el centro de                                                                            cada segmento
+            size = 3.5,  # Ajustar el tamaño del texto
+            color = "black") +  # Color del texto para mejorar la visibilidad 
+  labs(
+    title = "Frecuencias de las practicas digitales",
+    x = "Prácticas digitales",
+    y = "Encuestadxs"
+  ) +
+  scale_x_discrete(labels = c(
+    "frecuencia_compartir_contenidootros_red"  = "Compartir contenido de otros",
+    "frecuencia_mirar_publivideocontenidosotros_red" = "Mirar contenido de otros",
+    "frecuencia_mirar_transmisionesenvivo_red" = "Mirar transmisiones en vivo",
+    "frecuencia_subir_publivideocontenido_red" = "Subir contenido propio"
+  ))+
+  theme_minimal() +
+theme(  axis.text.x = element_text(angle = 45, hjust = 1),  # Rotar etiquetas del eje x para mejor legibilidad
+        panel.grid = element_blank(),    # Ocultar la cuadrícula del panel
+    legend.position = "right"        # Posicionar la leyenda a la derecha
+  )
+
+```
+
+#### Observaciones
+
+-  Mirar contenido de otros, ya sea publicaciones o videos es lo que mayormente se hace, ya que se realiza con una frecuencia de todos o casi todos los días (830).
+-  Mirar transmisiones en vivo, ya sea artistas, influencers o eventos de cualquier índole presenta una gran cantidad de personas que nunca lo suele hacer (418).
+
+
+
+
+
+
+
