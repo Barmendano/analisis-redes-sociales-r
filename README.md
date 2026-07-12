@@ -1,4 +1,4 @@
-# Uso del tiempo destinado a redes sociales por jóvenes en Argentina
+# Proyecto 2 | Uso del tiempo destinado a redes sociales por jóvenes en Argentina (R)
 
 Proyecto de análisis descriptivo de datos desarrollado en **R** mediante un flujo de trabajo reproducible para estudiar los hábitos de uso de redes sociales de jóvenes de 18 a 29 años en Argentina.
 
