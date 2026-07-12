@@ -1,6 +1,6 @@
 # Uso del tiempo destinado a redes sociales por jóvenes en Argentina
 
-Proyecto de análisis descriptivo de datos desarrollado en **R** mediante un flujo de trabajo reproducible para estudiar los hábitos en el uso de redes sociales en jóvenes de 18 a 29 años en Argentina.
+Proyecto de análisis descriptivo de datos desarrollado en **R** mediante un flujo de trabajo reproducible para estudiar los hábitos de uso de redes sociales de jóvenes de 18 a 29 años en Argentina.
 
 ---
 
@@ -8,9 +8,9 @@ Proyecto de análisis descriptivo de datos desarrollado en **R** mediante un flu
 
 Este proyecto desarrolla un análisis descriptivo de datos utilizando **R** y **R Markdown**, integrando la importación, preparación, análisis y visualización de datos para generar un informe dinámico en formato HTML.
 
-El estudio se centra en el uso de redes sociales por jóvenes argentinos de entre 18 y 29 años, utilizando información proveniente de la **Encuesta Nacional de Consumos Culturales (ENCC)**.
+El estudio se basa en información proveniente de la **Encuesta Nacional de Consumos Culturales (ENCC)** y analiza el uso del tiempo destinado a redes sociales por jóvenes argentinos de entre 18 y 29 años.
 
-El análisis aborda el uso de plataformas como **YouTube, Instagram, WhatsApp, Facebook, TikTok, X (Twitter), Telegram y Twitch**, además de explorar distintas prácticas digitales relacionadas con el consumo cultural.
+El análisis aborda el uso de **YouTube, Instagram, WhatsApp, Facebook, TikTok, X (Twitter), Telegram y Twitch**, además de explorar distintas prácticas digitales relacionadas con el consumo cultural.
 
 ---
 
@@ -28,7 +28,7 @@ En particular se buscó:
 
 ## Fuente de datos
 
-Los datos utilizados provienen de la **Encuesta Nacional de Consumos Culturales (ENCC)**.
+Los datos utilizados provienen de la **Encuesta Nacional de Consumos Culturales (ENCC)**, elaborada por la Secretaría de Cultura de la Nación.
 
 Para el desarrollo del proyecto se utilizó una base de datos preparada específicamente para este análisis a partir de información proveniente de dicha encuesta.
 
@@ -58,7 +58,23 @@ El proyecto se desarrolló mediante las siguientes etapas:
 4. Análisis del uso habitual de redes sociales.
 5. Comparación del uso de las distintas plataformas digitales.
 6. Análisis de las prácticas digitales desarrolladas por la población estudiada.
-7. Generación automática del informe en formato HTML mediante R Markdown.
+7. Generación automática de un informe dinámico en formato HTML mediante R Markdown.
+
+---
+
+## Visualizaciones
+
+### Uso habitual de redes sociales
+
+![Uso habitual](assets/uso-habitual-redes.png)
+
+### Redes sociales más utilizadas
+
+![Redes sociales](assets/redes-sociales-mas-utilizadas.png)
+
+### Prácticas digitales
+
+![Prácticas digitales](assets/practicas-digitales.png)
 
 ---
 
@@ -72,7 +88,7 @@ El proyecto se desarrolló mediante las siguientes etapas:
 
 ## Relación con otros proyectos
 
-Este proyecto complementa el análisis desarrollado previamente en **Power BI**, abordando la misma temática mediante un flujo de trabajo reproducible basado en programación.
+Este proyecto complementa el análisis desarrollado en **Power BI** sobre la misma temática, mostrando un enfoque basado en programación y análisis reproducible.
 
 ---
 
